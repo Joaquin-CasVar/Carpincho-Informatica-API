@@ -101,8 +101,8 @@ class Refrigeracion(models.Model):
 
 class Cpu(models.Model):
     producto = models.OneToOneField(Producto, on_delete=models.CASCADE, related_name='cpu')
-    arquitectura = models.ForeignKey(Arquitectura, on_delete=models.PROTECT, related_name='cpus')
-    socket = models.ForeignKey(Socket, on_delete=models.PROTECT, related_name='cpus')
+    arquitectura = models.ForeignKey(Arquitectura, on_delete=models.PROTECT, related_name='cpu')
+    socket = models.ForeignKey(Socket, on_delete=models.PROTECT, related_name='cpu')
     cant_nucleos = models.PositiveIntegerField()
     velocidad_reloj = models.DecimalField(max_digits=5, decimal_places=2)
     velocidad_boost = models.DecimalField(max_digits=5, decimal_places=2)
@@ -122,9 +122,9 @@ class Cpu(models.Model):
 
 class Gpu(models.Model):
     producto = models.OneToOneField(Producto, on_delete=models.CASCADE, related_name='gpu')
-    tipo_memoria = models.ForeignKey(TipoMemoria, on_delete=models.PROTECT, related_name='gpus')
-    chipset = models.ForeignKey(ChipsetGpu, on_delete=models.PROTECT, related_name='gpus')
-    refrigeracion = models.ForeignKey(Refrigeracion, on_delete=models.PROTECT, related_name='gpus')
+    tipo_memoria = models.ForeignKey(TipoMemoria, on_delete=models.PROTECT, related_name='gpu')
+    chipset = models.ForeignKey(ChipsetGpu, on_delete=models.PROTECT, related_name='gpu')
+    refrigeracion = models.ForeignKey(Refrigeracion, on_delete=models.PROTECT, related_name='gpu')
     memoria = models.PositiveIntegerField()
     velocidad_reloj = models.PositiveIntegerField()
     velocidad_boost = models.PositiveIntegerField()
