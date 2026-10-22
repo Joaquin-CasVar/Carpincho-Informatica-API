@@ -32,6 +32,28 @@ class GpuSerializer(serializers.ModelSerializer):
         model = Gpu
         fields = '__all__'
 
+class GpuPublicSerializer(serializers.ModelSerializer):
+    tipo_memoria = serializers.StringRelatedField()
+    chipset = serializers.StringRelatedField()
+    refrigeracion = serializers.StringRelatedField()
+    
+    class Meta:
+        model = Gpu
+        fields = [
+            "id",
+            "chipset",
+            "tipo_memoria",
+            "memoria",
+            "velocidad_reloj",
+            "velocidad_boost",
+            "longitud",
+            "ancho_slots",
+            "tdp",
+            "refrigeracion",
+            "producto",
+            "activo",
+        ]
+
 class ProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Producto
@@ -60,9 +82,9 @@ class ProductoPublicSerializer(serializers.ModelSerializer):
 
     def get_detalle_componente(self, obj):
         if (obj.tipo.id) == 1 and hasattr(obj, 'cpu'):
-            detalle_componente = CpuSerializer(obj.cpu)
+            detalle_componente = CpuPublicSerializer(obj.cpu)
         elif (obj.tipo.id) == 2 and hasattr(obj, 'gpu'):
-            detalle_componente = GpuSerializer(obj.gpu)
+            detalle_componente = GpuPublicSerializer(obj.gpu)
         else:
             return 'No hay detalle'
 

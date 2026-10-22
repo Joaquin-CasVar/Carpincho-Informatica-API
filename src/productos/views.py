@@ -13,7 +13,7 @@ from .serializers import (
     CpuSerializer,
     CpuPublicSerializer,
     GpuSerializer,
-    Gpu
+    GpuPublicSerializer
 )
 
 class ProductoViewSet(viewsets.ModelViewSet):
@@ -72,7 +72,7 @@ class CpuViewSet(viewsets.ModelViewSet):
         'incluye_cooler': ['exact'],
     }
     search_fields = ['socket__nombre', 'arquitectura__nombre']
-    ordering_fields = ['cant_nucleos', 'cache', ]
+    ordering_fields = ['cant_nucleos', 'cache']
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -83,4 +83,24 @@ class CpuViewSet(viewsets.ModelViewSet):
 
 class GpuViewSet(viewsets.ModelViewSet):
     queryset = Gpu.objects.all()
-    serializer_class = GpuSerializer
+
+    # Autenticacion
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    # Filtros, Busqueda y Ordenamiento
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = {
+        'chipset': ['exact'],
+        'tipo_memoria': ['exact'],
+        'memoria': ['exact', 'gt', 'lt', 'gte', 'lte'],
+        'refrigeracion': ['exact']
+    }
+    search_fields = ['chipset__nombre', 'refrigeracion__nombre']
+    ordering_fields = ['memoria', 'chipset__nombre', 'velocidad_boost']
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return GpuPublicSerializer
+        else:
+            return GpuSerializer
+
