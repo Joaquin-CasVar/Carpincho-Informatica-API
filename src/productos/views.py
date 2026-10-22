@@ -7,7 +7,14 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.response import Response
 
 from .models import Producto, Cpu, Gpu
-from .serializers import ProductoSerializer, ProductoPublicSerializer, CpuSerializer, GpuSerializer
+from .serializers import (
+    ProductoSerializer,
+    ProductoPublicSerializer,
+    CpuSerializer,
+    CpuPublicSerializer,
+    GpuSerializer,
+    Gpu
+)
 
 class ProductoViewSet(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
@@ -51,7 +58,28 @@ class ProductoViewSet(viewsets.ModelViewSet):
 
 class CpuViewSet(viewsets.ModelViewSet):
     queryset = Cpu.objects.all()
-    serializer_class = CpuSerializer
+
+    # Autenticacion
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    # Filtros, Busqueda y Ordenamiento
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = {
+        'cant_nucleos': ['exact', 'gt', 'lt', 'gte', 'lte'],
+        'cache': ['exact', 'gt', 'lt', 'gte', 'lte'],
+        'tdp': ['exact', 'gt', 'lt', 'gte', 'lte'],
+        'graficos_integrados': ['exact'],
+        'incluye_cooler': ['exact'],
+    }
+    search_fields = ['socket__nombre', 'arquitectura__nombre']
+    ordering_fields = ['cant_nucleos', 'cache', ]
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return CpuPublicSerializer
+        else:
+            return CpuSerializer
+
 
 class GpuViewSet(viewsets.ModelViewSet):
     queryset = Gpu.objects.all()

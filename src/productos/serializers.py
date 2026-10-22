@@ -6,6 +6,27 @@ class CpuSerializer(serializers.ModelSerializer):
         model = Cpu
         fields = '__all__'
 
+class CpuPublicSerializer(serializers.ModelSerializer):
+    arquitectura = serializers.StringRelatedField()
+    socket = serializers.StringRelatedField()
+
+    class Meta:
+        model = Cpu
+        fields = [
+            "id",
+            "cant_nucleos",
+            "velocidad_reloj",
+            "velocidad_boost",
+            "graficos_integrados",
+            "cache",
+            "incluye_cooler",
+            "tdp",
+            "arquitectura",
+            "socket",
+            "producto",
+            "activo",
+        ]
+
 class GpuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gpu
