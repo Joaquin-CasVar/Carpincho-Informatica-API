@@ -1,0 +1,92 @@
+from rest_framework import serializers
+from .models import Cpu, Gpu, Producto
+
+class CpuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cpu
+        fields = '__all__'
+
+class CpuPublicSerializer(serializers.ModelSerializer):
+    arquitectura = serializers.StringRelatedField()
+    socket = serializers.StringRelatedField()
+
+    class Meta:
+        model = Cpu
+        fields = [
+            "id",
+            "cant_nucleos",
+            "velocidad_reloj",
+            "velocidad_boost",
+            "graficos_integrados",
+            "cache",
+            "incluye_cooler",
+            "tdp",
+            "arquitectura",
+            "socket",
+            "producto",
+            "activo",
+        ]
+
+class GpuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gpu
+        fields = '__all__'
+
+class GpuPublicSerializer(serializers.ModelSerializer):
+    tipo_memoria = serializers.StringRelatedField()
+    chipset = serializers.StringRelatedField()
+    refrigeracion = serializers.StringRelatedField()
+    
+    class Meta:
+        model = Gpu
+        fields = [
+            "id",
+            "chipset",
+            "tipo_memoria",
+            "memoria",
+            "velocidad_reloj",
+            "velocidad_boost",
+            "longitud",
+            "ancho_slots",
+            "tdp",
+            "refrigeracion",
+            "producto",
+            "activo",
+        ]
+
+class ProductoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Producto
+        fields = '__all__'
+
+class ProductoPublicSerializer(serializers.ModelSerializer):
+    detalle_componente = serializers.SerializerMethodField()
+
+    fabricante = serializers.StringRelatedField()
+    color = serializers.StringRelatedField()
+    tipo = serializers.StringRelatedField()
+
+    class Meta:
+        model = Producto
+        fields = [
+                "id",
+                "nombre",
+                "precio",
+                "stock",
+                "fabricante",
+                "color",
+                "tipo",
+                "activo",
+                'detalle_componente',
+            ]
+
+    def get_detalle_componente(self, obj):
+        if (obj.tipo.id) == 1 and hasattr(obj, 'cpu'):
+            detalle_componente = CpuPublicSerializer(obj.cpu)
+        elif (obj.tipo.id) == 2 and hasattr(obj, 'gpu'):
+            detalle_componente = GpuPublicSerializer(obj.gpu)
+        else:
+            return 'No hay detalle'
+
+        return detalle_componente.data
+
