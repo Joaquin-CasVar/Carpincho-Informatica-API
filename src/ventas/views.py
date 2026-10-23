@@ -41,6 +41,7 @@ class VentaViewSet(viewsets.ModelViewSet):
         venta = self.get_object()
         venta.activo = False
         venta.save()
+        venta.detalles.update(activo=False)
         return Response({'mensaje': f'La venta {venta.pk} fue dada de baja'})
 
 
