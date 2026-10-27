@@ -33,6 +33,7 @@ class Producto(models.Model):
     nombre = models.CharField(max_length=150)
     precio = models.DecimalField(max_digits=12, decimal_places=2)
     stock = models.PositiveIntegerField(default=0)
+    imagen = models.CharField(max_length=256, blank=True, null=True)
     activo = models.BooleanField(default=True)
 
     def __str__(self):
