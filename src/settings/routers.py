@@ -11,6 +11,8 @@ from productos.views import (
     SocketViewSet,
     ChipsetGpuViewSet
 )
+from ventas.views import DetalleVentaViewSet, VentaViewSet
+from usuarios.views import UserViewSet, ClienteViewSet, VendedorViewSet
 
 router = DefaultRouter()
 
@@ -24,3 +26,13 @@ router.register(r'tipos-producto', TipoProductoViewSet, basename='tipos-producto
 router.register(r'arquitecturas', ArquitecturaViewSet, basename='arquitecturas-api')
 router.register(r'sockets', SocketViewSet, basename='sockets-api')
 router.register(r'chipsets-gpu', ChipsetGpuViewSet, basename='chipsets-gpu-api')
+
+
+# Usuarios
+router.register(r'usuarios', UserViewSet, basename='usuario')
+router.register(r'clientes', ClienteViewSet, basename='cliente')
+router.register(r'vendedores', VendedorViewSet, basename='vendedor')
+
+# ventas
+router.register(r'ventas', VentaViewSet, basename='ventas-api')
+router.register(r'detalles-venta', DetalleVentaViewSet, basename='detalles-venta-api')
