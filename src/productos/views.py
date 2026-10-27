@@ -46,10 +46,10 @@ class ProductoViewSet(viewsets.ModelViewSet):
         producto = self.get_object()
         producto.activo = False
 
-        if (producto.tipo.id) == 1 and hasattr(producto, 'cpu'):
+        if hasattr(producto, 'cpu'):
             producto.cpu.activo = False
             producto.cpu.save()
-        elif (producto.tipo.id) == 2 and hasattr(producto, 'gpu'):
+        elif hasattr(producto, 'gpu'):
             producto.gpu.activo = False
             producto.gpu.save()
 
