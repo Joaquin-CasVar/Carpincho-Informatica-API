@@ -6,14 +6,31 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.response import Response
 
-from .models import Producto, Cpu, Gpu
+from .models import (
+    Producto,
+    Cpu,
+    Gpu,
+    Fabricante,
+    Color,
+    TipoProducto,
+    Arquitectura,
+    Socket,
+    ChipsetGpu,
+)
+
 from .serializers import (
     ProductoSerializer,
     ProductoPublicSerializer,
+    FabricanteSerializer,
+    ColorSerializer,
+    TipoProductoSerializer,
     CpuSerializer,
     CpuPublicSerializer,
+    ArquitecturaSerializer,
+    SocketSerializer,
     GpuSerializer,
-    GpuPublicSerializer
+    GpuPublicSerializer,
+    ChipsetGpuSerializer,
 )
 
 class ProductoViewSet(viewsets.ModelViewSet):
@@ -65,6 +82,8 @@ class CpuViewSet(viewsets.ModelViewSet):
     # Filtros, Busqueda y Ordenamiento
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = {
+        'arquitectura': ['exact'],
+        'socket': ['exact'],
         'cant_nucleos': ['exact', 'gt', 'lt', 'gte', 'lte'],
         'cache': ['exact', 'gt', 'lt', 'gte', 'lte'],
         'tdp': ['exact', 'gt', 'lt', 'gte', 'lte'],
@@ -91,7 +110,6 @@ class GpuViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = {
         'chipset': ['exact'],
-        'tipo_memoria': ['exact'],
         'memoria': ['exact', 'gt', 'lt', 'gte', 'lte'],
         'refrigeracion': ['exact']
     }
@@ -104,3 +122,33 @@ class GpuViewSet(viewsets.ModelViewSet):
         else:
             return GpuSerializer
 
+
+class FabricanteViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Fabricante.objects.all()
+    serializer_class = FabricanteSerializer
+    permission_classes = [AllowAny]
+
+class ColorViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Color.objects.all()
+    serializer_class = ColorSerializer
+    permission_classes = [AllowAny]
+
+class TipoProductoViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = TipoProducto.objects.all()
+    serializer_class = TipoProductoSerializer
+    permission_classes = [AllowAny]
+
+class ArquitecturaViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Arquitectura.objects.all()
+    serializer_class = ArquitecturaSerializer
+    permission_classes = [AllowAny]
+
+class SocketViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Socket.objects.all()
+    serializer_class = SocketSerializer
+    permission_classes = [AllowAny]
+
+class ChipsetGpuViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = ChipsetGpu.objects.all()
+    serializer_class = ChipsetGpuSerializer
+    permission_classes = [AllowAny]

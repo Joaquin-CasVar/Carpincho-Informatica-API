@@ -1,5 +1,27 @@
 from rest_framework import serializers
-from .models import Cpu, Gpu, Producto
+from .models import (
+    Arquitectura,
+    Socket,
+    Cpu,
+    ChipsetGpu,
+    Gpu,
+    Fabricante,
+    Color,
+    TipoProducto,
+    Producto
+)
+
+class ArquitecturaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Arquitectura
+        fields = '__all__'
+
+class SocketSerializer(serializers.ModelSerializer):
+    tipo = serializers.StringRelatedField()
+    
+    class Meta:
+        model = Socket
+        fields = '__all__'
 
 class CpuSerializer(serializers.ModelSerializer):
     class Meta:
@@ -7,8 +29,8 @@ class CpuSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CpuPublicSerializer(serializers.ModelSerializer):
-    arquitectura = serializers.StringRelatedField()
-    socket = serializers.StringRelatedField()
+    arquitectura = ArquitecturaSerializer()
+    socket = SocketSerializer()
 
     class Meta:
         model = Cpu
@@ -27,14 +49,19 @@ class CpuPublicSerializer(serializers.ModelSerializer):
             "activo",
         ]
 
+class ChipsetGpuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChipsetGpu
+        fields = '__all__'
+
 class GpuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gpu
         fields = '__all__'
 
 class GpuPublicSerializer(serializers.ModelSerializer):
+    chipset = ChipsetGpuSerializer()
     tipo_memoria = serializers.StringRelatedField()
-    chipset = serializers.StringRelatedField()
     refrigeracion = serializers.StringRelatedField()
     
     class Meta:
@@ -54,6 +81,21 @@ class GpuPublicSerializer(serializers.ModelSerializer):
             "activo",
         ]
 
+class FabricanteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fabricante
+        fields = '__all__'
+
+class ColorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Color
+        fields = '__all__'
+
+class TipoProductoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoProducto
+        fields = '__all__'
+
 class ProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Producto
@@ -62,9 +104,9 @@ class ProductoSerializer(serializers.ModelSerializer):
 class ProductoPublicSerializer(serializers.ModelSerializer):
     detalle_componente = serializers.SerializerMethodField()
 
-    fabricante = serializers.StringRelatedField()
-    color = serializers.StringRelatedField()
-    tipo = serializers.StringRelatedField()
+    fabricante = FabricanteSerializer()
+    color = ColorSerializer()
+    tipo = TipoProductoSerializer()
 
     class Meta:
         model = Producto
@@ -81,12 +123,11 @@ class ProductoPublicSerializer(serializers.ModelSerializer):
             ]
 
     def get_detalle_componente(self, obj):
-        if  hasattr(obj, 'cpu'):
+        if hasattr(obj, 'cpu'):
             detalle_componente = CpuPublicSerializer(obj.cpu)
-        elif  hasattr(obj, 'gpu'):
+        elif hasattr(obj, 'gpu'):
             detalle_componente = GpuPublicSerializer(obj.gpu)
         else:
             return 'No hay detalle'
 
         return detalle_componente.data
-
