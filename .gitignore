@@ -10,4 +10,4 @@ wheels/
 .venv
 
 # Local database
-*.sqlite
+*.sqlite3
