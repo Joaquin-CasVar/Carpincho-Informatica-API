@@ -81,9 +81,9 @@ class ProductoPublicSerializer(serializers.ModelSerializer):
             ]
 
     def get_detalle_componente(self, obj):
-        if (obj.tipo.id) == 1 and hasattr(obj, 'cpu'):
+        if  hasattr(obj, 'cpu'):
             detalle_componente = CpuPublicSerializer(obj.cpu)
-        elif (obj.tipo.id) == 2 and hasattr(obj, 'gpu'):
+        elif  hasattr(obj, 'gpu'):
             detalle_componente = GpuPublicSerializer(obj.gpu)
         else:
             return 'No hay detalle'
