@@ -58,3 +58,13 @@ class DetalleVentaViewSet(viewsets.ModelViewSet):
         detalle.activo = False
         detalle.save()
         return Response({'mensaje': f'El detalle {detalle.pk} fue dado de baja'})
+
+    @action(detail=True, methods=['post'], permission_classes=[VentaStaffPermission])
+    def descontar_stock(self, request, pk=None):
+        detalle = self.get_object()
+        producto = detalle.producto
+        if producto.stock < detalle.cantidad:
+            return Response({'error': f'Stock insuficiente de {producto.nombre}'}, status=400)
+        producto.stock -= detalle.cantidad
+        producto.save()
+        return Response({'mensaje': 'Stock descontado', 'stock': producto.stock})
