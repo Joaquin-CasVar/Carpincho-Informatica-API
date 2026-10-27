@@ -1,4 +1,12 @@
-from django.shortcuts import render
+from .models import User, Cliente, Vendedor
+from .serializers import UserSerializer, ClienteSerializer, VendedorSerializer
+from django_filters.rest_framework import DjangoFilterBackend
+
+from rest_framework import viewsets, status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
 
 from .models import User, Cliente, Vendedor
 from .serializers import UserSerializer, ClienteSerializer, VendedorSerializer
@@ -21,19 +29,14 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 # Mixin compartido para el borrado logico del modelo User, Cliente y Vendedor
 class BorradoLogicoMixin:
-    @action(detail=True, methods=['delete'], url_path='borrado-logico')
-    def borrado_logico(self, request, pk=None):
+
+    def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.activo = False
         instance.save()
-        
-        # Si estamos borrando un Cliente o Vendedor, desactivamos también su Usuario
-        if hasattr(instance, 'persona'):
-            instance.persona.activo = False
-            instance.persona.save()
-            
+
         return Response(
-            {"detail": f"{self.model_name} desactivado con éxito de forma lógica."},
+            {"detail": "Registro desactivado correctamente"},
             status=status.HTTP_200_OK
         )
 
