@@ -1,16 +1,15 @@
 from .models import User, Cliente, Vendedor
+from .permissions import UsuarioStaffPermission
 from .serializers import UserSerializer, ClienteSerializer, VendedorSerializer
+
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from drf_spectacular.utils import extend_schema, OpenApiResponse
-
-# Create your views here.
 
 #Paginado local
 class StandardResultsSetPagination(PageNumberPagination):
@@ -35,7 +34,7 @@ class BorradoLogicoMixin:
 class UserViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
     queryset = User.objects.filter(activo=True)  # Solo trae usuarios activos
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated] # noqa: RUF012
+    permission_classes = [UsuarioStaffPermission] # noqa: RUF012
     model_name = "Usuario"
     
     # Filtros y búsquedas para Persona
@@ -60,7 +59,7 @@ class UserViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
 class ClienteViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
     queryset = Cliente.objects.filter(activo=True).select_related('persona')
     serializer_class = ClienteSerializer
-    permission_classes = [IsAuthenticated] # noqa: RUF012
+    permission_classes = [UsuarioStaffPermission] # noqa: RUF012
     pagination_class = StandardResultsSetPagination
     model_name = "Cliente"
     
@@ -86,7 +85,7 @@ class ClienteViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
 class VendedorViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
     queryset = Vendedor.objects.filter(activo=True).select_related('persona')
     serializer_class = VendedorSerializer
-    permission_classes = [IsAuthenticated] # noqa: RUF012
+    permission_classes = [UsuarioStaffPermission] # noqa: RUF012
     pagination_class = StandardResultsSetPagination
     model_name = "Vendedor"
     

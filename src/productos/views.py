@@ -5,7 +5,7 @@ from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 
@@ -20,6 +20,8 @@ from .models import (
     Socket,
     ChipsetGpu,
 )
+
+from .permissions import ProductoStaffOrReadOnlyPermission
 
 from .serializers import (
     ProductoSerializer,
@@ -40,7 +42,7 @@ class ProductoViewSet(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
 
     # Autenticacion
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [ProductoStaffOrReadOnlyPermission]
 
     # Filtros, Busqueda y Ordenamiento
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -100,7 +102,7 @@ class CpuViewSet(viewsets.ModelViewSet):
     queryset = Cpu.objects.all()
 
     # Autenticacion
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [ProductoStaffOrReadOnlyPermission]
 
     # Filtros, Busqueda y Ordenamiento
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -127,7 +129,7 @@ class GpuViewSet(viewsets.ModelViewSet):
     queryset = Gpu.objects.all()
 
     # Autenticacion
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [ProductoStaffOrReadOnlyPermission]
 
     # Filtros, Busqueda y Ordenamiento
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
