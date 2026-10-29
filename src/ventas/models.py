@@ -20,7 +20,7 @@ class Venta(models.Model):
     vendedor = models.ForeignKey(Vendedor, on_delete=models.PROTECT, related_name='ventas')
     metodo_pago = models.ForeignKey(MetodoPago, on_delete=models.PROTECT, related_name='ventas')
     fecha = models.DateField()
-    total = models.DecimalField(max_digits=12, decimal_places=2)
+    total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     momento_carga = models.DateTimeField(auto_now_add=True)
     activo = models.BooleanField(default=True)
 
@@ -32,8 +32,8 @@ class DetalleVenta(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE, related_name='detalles')
     producto = models.ForeignKey(Producto, on_delete=models.PROTECT, related_name='detalles_venta')
     cantidad = models.PositiveIntegerField()
-    precio_unitario = models.DecimalField(max_digits=12, decimal_places=2)
-    subtotal = models.DecimalField(max_digits=12, decimal_places=2)
+    precio_unitario = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     activo = models.BooleanField(default=True)
 
     class Meta:

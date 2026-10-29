@@ -1,10 +1,13 @@
 from django_filters.rest_framework import DjangoFilterBackend
 
+from drf_spectacular.utils import extend_schema, OpenApiResponse
+
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+
 
 from .models import (
     Producto,
@@ -58,6 +61,26 @@ class ProductoViewSet(viewsets.ModelViewSet):
             return ProductoPublicSerializer
         else:
             return ProductoSerializer
+
+    @extend_schema(
+        summary='Borrado lógico de producto',
+        description=(
+            'Desactiva un producto sin eliminarlo de la base de datos. '
+            'Si el producto tiene una CPU o GPU relacionada, '
+            'también se desactiva ese componente.'
+        ),
+        responses={
+            200: OpenApiResponse(
+                description='Producto y componente relacionado desactivados correctamente'
+            ),
+            401: OpenApiResponse(
+                description='Usuario no autenticado'
+            ),
+            404: OpenApiResponse(
+                description='Producto no encontrado'
+            ),
+        }
+    )
 
     # Funcion personalizada borrado logico del producto y su componente relacionado
     @action(detail=True, methods=['delete'])
@@ -125,32 +148,39 @@ class GpuViewSet(viewsets.ModelViewSet):
             return GpuSerializer
 
 
+
 class FabricanteViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Fabricante.objects.all()
     serializer_class = FabricanteSerializer
     permission_classes = [AllowAny]
+
 
 class ColorViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Color.objects.all()
     serializer_class = ColorSerializer
     permission_classes = [AllowAny]
 
+
 class TipoProductoViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TipoProducto.objects.all()
     serializer_class = TipoProductoSerializer
     permission_classes = [AllowAny]
+
 
 class ArquitecturaViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Arquitectura.objects.all()
     serializer_class = ArquitecturaSerializer
     permission_classes = [AllowAny]
 
+
 class SocketViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Socket.objects.all()
     serializer_class = SocketSerializer
     permission_classes = [AllowAny]
 
+
 class ChipsetGpuViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ChipsetGpu.objects.all()
     serializer_class = ChipsetGpuSerializer
     permission_classes = [AllowAny]
+
