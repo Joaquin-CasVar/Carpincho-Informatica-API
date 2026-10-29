@@ -6,6 +6,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.response import Response
 
+
 from .models import (
     Producto,
     Cpu,
@@ -123,32 +124,39 @@ class GpuViewSet(viewsets.ModelViewSet):
             return GpuSerializer
 
 
+
 class FabricanteViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Fabricante.objects.all()
     serializer_class = FabricanteSerializer
     permission_classes = [AllowAny]
+
 
 class ColorViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Color.objects.all()
     serializer_class = ColorSerializer
     permission_classes = [AllowAny]
 
+
 class TipoProductoViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TipoProducto.objects.all()
     serializer_class = TipoProductoSerializer
     permission_classes = [AllowAny]
+
 
 class ArquitecturaViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Arquitectura.objects.all()
     serializer_class = ArquitecturaSerializer
     permission_classes = [AllowAny]
 
+
 class SocketViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Socket.objects.all()
     serializer_class = SocketSerializer
     permission_classes = [AllowAny]
 
+
 class ChipsetGpuViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ChipsetGpu.objects.all()
     serializer_class = ChipsetGpuSerializer
     permission_classes = [AllowAny]
+

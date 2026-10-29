@@ -2,11 +2,15 @@ from .models import User, Cliente, Vendedor
 from .serializers import UserSerializer, ClienteSerializer, VendedorSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
+from drf_spectacular.openapi import AutoSchema
+
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 
 # Create your views here.
 
@@ -42,6 +46,7 @@ class UserViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
     search_fields = ['username', 'telefono'] # noqa: RUF012
     ordering_fields = ['id', 'username'] # noqa: RUF012
 
+
 #ViewSets para el modelo Cliente
 class ClienteViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
     queryset = Cliente.objects.filter(activo=True).select_related('persona')
@@ -55,6 +60,7 @@ class ClienteViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
     filterset_fields = ['direccion', 'persona__email'] # noqa: RUF012
     search_fields = ['direccion', 'persona__username', 'persona__first_name', 'persona__last_name'] # noqa: RUF012
     ordering_fields = ['id', 'persona__username'] # noqa: RUF012
+
 
 #ViewSets para el modelo Vendedor
 class VendedorViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
