@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'ventas',
     'drf_spectacular',
     'corsheaders',
+    'inicio',
 ]
 
 AUTH_USER_MODEL = 'usuarios.User'
