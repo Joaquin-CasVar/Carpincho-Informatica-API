@@ -104,13 +104,13 @@ class DetalleVentaViewSet(viewsets.ModelViewSet):
         return Response({'mensaje': 'Stock descontado', 'stock': producto.stock})
 
     @extend_schema(
-            summary='Revertir stock de producto',
-            description='Restaura el stock del producto a su valor original antes de la venta.',
+            summary='calcular subtotal y actualizar total de venta',
+            description='Calcula el subtotal del detalle de venta y actualiza el total de la venta correspondiente.',
             request=None,
             responses={
-                200: OpenApiResponse(description='Stock restaurado correctamente'),
+                200: OpenApiResponse(description='Subtotal y total actualizados correctamente'),
                 403: OpenApiResponse(description='No tiene permisos para esta operación'),
-                404: OpenApiResponse(description='Detalle no encontrado'),
+                404: OpenApiResponse(description='Detalle de venta no encontrado'),
             }
         )
 
