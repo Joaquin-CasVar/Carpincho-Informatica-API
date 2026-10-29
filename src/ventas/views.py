@@ -32,7 +32,7 @@ class VentaViewSet(viewsets.ModelViewSet):
     ordering_fields = ['fecha', 'total', 'id']
 
     def get_serializer_class(self):
-        if self.request.method == 'GET':
+        if self.action == 'list':
             return VentaListSerializer
         return VentaSerializer
 
@@ -68,24 +68,3 @@ class DetalleVentaViewSet(viewsets.ModelViewSet):
         producto.stock -= detalle.cantidad
         producto.save()
         return Response({'mensaje': 'Stock descontado', 'stock': producto.stock})
-
-    @action(detail=True, methods=['post'])
-    def calcular_subtotal(self, request, pk=None):
-        detalle = self.get_object()
-        precio = detalle.producto.precio
-
-        # Utiliza el precio del producto para asignarle el precio unitario
-        detalle.precio_unitario = precio
-        # Calcula el subtotal 
-        detalle.subtotal = precio * detalle.cantidad
-        detalle.save()
-
-        # Le suma el subtotal al total de la venta
-        detalle.venta.total += detalle.subtotal
-        detalle.venta.save()
-
-        return Response({
-            'mensaje': 'Subtotal y total actualizados',
-            'Subtotal del producto': {detalle.subtotal},
-            'Total actualizado de la venta': {detalle.venta.total}
-        })
