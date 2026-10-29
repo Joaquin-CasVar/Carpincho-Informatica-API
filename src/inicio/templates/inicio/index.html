@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carpincho Informática</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f1ea;
+            color: #2b2b2b;
+            margin: 0;
+            padding: 0 16px;
+        }
+        main {
+            max-width: 720px;
+            margin: 48px auto;
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-top: 0;
+            color: #5a3e1b;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin: 12px 0;
+        }
+        a {
+            display: block;
+            padding: 12px 16px;
+            background: #5a3e1b;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        a:hover {
+            background: #7a5628;
+        }
+        small {
+            display: block;
+            margin-top: 4px;
+            color: #6b6b6b;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Carpincho Informática</h1>
+        <p>
+            Bienvenido a la API de Carpincho Informática, una tienda de hardware.
+            Desde acá se administran los productos (procesadores, placas de video y más),
+            los usuarios (clientes y vendedores) y las ventas con su detalle y stock.
+        </p>
+
+        <h2>Rutas</h2>
+        <ul>
+            <li>
+                <a href="/admin/">/admin</a>
+                <small>Panel de administración de Django</small>
+            </li>
+            <li>
+                <a href="/api/">/api</a>
+                <small>API REST navegable: productos, usuarios y ventas</small>
+            </li>
+            <li>
+                <a href="/docs/">/docs</a>
+                <small>Documentación de la API</small>
+            </li>
+        </ul>
+    </main>
+</body>
+</html>

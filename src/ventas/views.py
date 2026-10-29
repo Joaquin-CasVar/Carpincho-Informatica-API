@@ -5,6 +5,8 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from drf_spectacular.utils import extend_schema, OpenApiResponse
+
 from .models import DetalleVenta, Venta
 from .permissions import VentaStaffPermission
 from .serializers import DetalleVentaSerializer, VentaListSerializer, VentaSerializer
@@ -36,6 +38,16 @@ class VentaViewSet(viewsets.ModelViewSet):
             return VentaListSerializer
         return VentaSerializer
 
+    @extend_schema(
+        summary='Borrado lógico de venta',
+        description='Desactiva una venta y todos sus detalles sin eliminarlos de la base de datos.',
+        responses={
+            200: OpenApiResponse(description='Venta desactivada correctamente'),
+            403: OpenApiResponse(description='No tiene permisos para realizar esta operación'),
+            404: OpenApiResponse(description='Venta no encontrada'),
+        }
+    )
+
     @action(detail=True, methods=['delete'], permission_classes=[VentaStaffPermission])
     def borrado_logico(self, request, pk=None):
         venta = self.get_object()
@@ -52,12 +64,34 @@ class DetalleVentaViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['venta']
 
+    @extend_schema(
+        summary='Borrado lógico de detalle de venta',
+        description='Desactiva un detalle de venta sin eliminarlo de la base de datos.',
+        responses={
+            200: OpenApiResponse(description='Detalle de venta desactivado correctamente'),
+            403: OpenApiResponse(description='No tiene permisos para realizar esta operación'),
+            404: OpenApiResponse(description='Detalle de venta no encontrado'),
+        }
+    )
+
     @action(detail=True, methods=['delete'], permission_classes=[VentaStaffPermission])
     def borrado_logico(self, request, pk=None):
         detalle = self.get_object()
         detalle.activo = False
         detalle.save()
         return Response({'mensaje': f'El detalle {detalle.pk} fue dado de baja'})
+
+    @extend_schema(
+        summary='Descontar stock de producto',
+        description='Descuenta del stock del producto la cantidad indicada en el detalle de venta. Si el stock es insuficiente, devuelve un error 400.',
+        request=None,
+        responses={
+            200: OpenApiResponse(description='Stock descontado correctamente'),
+            400: OpenApiResponse(description='Stock insuficiente'),
+            403: OpenApiResponse(description='No tiene permisos para esta operación'),
+            404: OpenApiResponse(description='Detalle no encontrado'),
+        }
+    )
 
     @action(detail=True, methods=['post'], permission_classes=[VentaStaffPermission])
     def descontar_stock(self, request, pk=None):
