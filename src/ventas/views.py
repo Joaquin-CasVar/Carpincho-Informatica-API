@@ -103,6 +103,17 @@ class DetalleVentaViewSet(viewsets.ModelViewSet):
         producto.save()
         return Response({'mensaje': 'Stock descontado', 'stock': producto.stock})
 
+    @extend_schema(
+            summary='Revertir stock de producto',
+            description='Restaura el stock del producto a su valor original antes de la venta.',
+            request=None,
+            responses={
+                200: OpenApiResponse(description='Stock restaurado correctamente'),
+                403: OpenApiResponse(description='No tiene permisos para esta operación'),
+                404: OpenApiResponse(description='Detalle no encontrado'),
+            }
+        )
+
     @action(detail=True, methods=['post'])
     def calcular_subtotal(self, request, pk=None):
         detalle = self.get_object()
