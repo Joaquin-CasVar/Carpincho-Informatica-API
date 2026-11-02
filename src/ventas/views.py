@@ -34,7 +34,7 @@ class VentaViewSet(viewsets.ModelViewSet):
     ordering_fields = ['fecha', 'total', 'id']
 
     def get_serializer_class(self):
-        if self.request.method == 'GET':
+        if self.action == 'list':
             return VentaListSerializer
         return VentaSerializer
 
