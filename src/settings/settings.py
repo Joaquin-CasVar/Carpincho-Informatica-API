@@ -94,7 +94,7 @@ SPECTACULAR_SETTINGS = {
     'TITLE': 'API de ventas',
     'DESCRIPTION': 'API para la gestión de ventas, clientes y productos',
     'VERSION': '3.0.0',
-    "REDOC_DIST": "https://jsdelivr.net",
+    "REDOC_DIST": "https://cdn.jsdelivr.net/npm/redoc@2.5.4", # https://github.com/tfranzel/drf-spectacular/issues/1543
 }
 
 SIMPLE_JWT = {

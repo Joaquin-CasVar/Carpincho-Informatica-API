@@ -120,6 +120,7 @@ class ProductoPublicSerializer(serializers.ModelSerializer):
                 "tipo",
                 "activo",
                 'detalle_componente',
+                'imagen',
             ]
 
     def get_detalle_componente(self, obj):

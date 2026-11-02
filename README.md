@@ -2,10 +2,12 @@
 Backend de una tienda de informática y hardware que permite carga, lectura, actualización y borrado de productos, ventas y usuarios. Otras funcionalidades incluyen un panel de administración, configuración de Docker y documentación estándar (OpenAPI Specification)
 
 ### Deploy en Render
-La aplicación está desplegada a través de [render]()
+La aplicación está desplegada a través de [Render]()
 
 ### Proyecto frontend que consume la API
-[Carpincho Informática Frontend]()
+[Repositorio](https://github.com/Joaquin-CasVar/Carpincho-Informatica-Next.js)
+
+[Despliegue en Vercel]()
 
 ### Prerrequisitos
 - [Python](https://www.python.org/downloads/)
@@ -29,19 +31,19 @@ La aplicación está desplegada a través de [render]()
 
 ## Proyecto funcionando
 Ruta base
-![Ruta base]()
+![Ruta base](https://i.imgur.com/9IjdDNN.png)
 
 API Navegable
-![API Navegable]()
+![API Navegable](https://i.imgur.com/WhLV3PT.png)
 
 Listado de productos
-![Listado de productos]()
+![Listado de productos](https://i.imgur.com/HFRqVg3.png)
 
 Panel de Administración
-![Panel de Administración]()
+![Panel de Administración](https://i.imgur.com/RSabXwG.png)
 
 Documentación Swagger
-![Documentación Swagger]()
+![Documentación Swagger](https://i.imgur.com/erwH8gX.png)
 
 Documentación Redoc
-![Documentación Redoc]()
+![Documentación Redoc](https://i.imgur.com/Fof3i8e.png)
