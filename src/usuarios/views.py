@@ -1,14 +1,15 @@
 from .models import User, Cliente, Vendedor
+from .permissions import UsuarioStaffPermission
 from .serializers import UserSerializer, ClienteSerializer, VendedorSerializer
+
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-# Create your views here.
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 #Paginado local
 class StandardResultsSetPagination(PageNumberPagination):
@@ -33,7 +34,7 @@ class BorradoLogicoMixin:
 class UserViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
     queryset = User.objects.filter(activo=True)  # Solo trae usuarios activos
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated] # noqa: RUF012
+    permission_classes = [UsuarioStaffPermission] # noqa: RUF012
     model_name = "Usuario"
     
     # Filtros y búsquedas para Persona
@@ -42,11 +43,23 @@ class UserViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
     search_fields = ['username', 'telefono'] # noqa: RUF012
     ordering_fields = ['id', 'username'] # noqa: RUF012
 
+    @extend_schema(
+        summary='Desactivar usuario',
+        description='Realiza el borrado lógico cambiando activo a False.',
+        responses={
+            200: OpenApiResponse(description='Usuario desactivado correctamente'),
+            404: OpenApiResponse(description='Usuario no encontrado')
+        }
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
+
 #ViewSets para el modelo Cliente
 class ClienteViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
     queryset = Cliente.objects.filter(activo=True).select_related('persona')
     serializer_class = ClienteSerializer
-    permission_classes = [IsAuthenticated] # noqa: RUF012
+    permission_classes = [UsuarioStaffPermission] # noqa: RUF012
     pagination_class = StandardResultsSetPagination
     model_name = "Cliente"
     
@@ -56,11 +69,23 @@ class ClienteViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
     search_fields = ['direccion', 'persona__username', 'persona__first_name', 'persona__last_name'] # noqa: RUF012
     ordering_fields = ['id', 'persona__username'] # noqa: RUF012
 
+    @extend_schema(
+            summary='Desactivar cliente',
+            description='Realiza el borrado lógico cambiando activo a False.',
+            responses={
+                200: OpenApiResponse(description='Cliente desactivado correctamente'),
+                404: OpenApiResponse(description='Cliente no encontrado')
+            }
+        )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
+
 #ViewSets para el modelo Vendedor
 class VendedorViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
     queryset = Vendedor.objects.filter(activo=True).select_related('persona')
     serializer_class = VendedorSerializer
-    permission_classes = [IsAuthenticated] # noqa: RUF012
+    permission_classes = [UsuarioStaffPermission] # noqa: RUF012
     pagination_class = StandardResultsSetPagination
     model_name = "Vendedor"
     
@@ -69,3 +94,14 @@ class VendedorViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
     filterset_fields = ['salario'] # noqa: RUF012
     search_fields = ['persona__username', 'persona__first_name', 'persona__last_name', 'persona__telefono'] # noqa: RUF012
     ordering_fields = ['id', 'salario', 'persona__username'] # noqa: RUF012
+
+    @extend_schema(
+            summary='Desactivar vendedor',
+            description='Realiza el borrado lógico cambiando activo a False.',
+            responses={
+                200: OpenApiResponse(description='Vendedor desactivado correctamente'),
+                404: OpenApiResponse(description='Vendedor no encontrado')
+            }
+        )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
