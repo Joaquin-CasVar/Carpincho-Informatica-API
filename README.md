@@ -1,6 +1,11 @@
 # API Carpincho Informática
 Backend de una tienda de informática y hardware que permite carga, lectura, actualización y borrado de productos, ventas y usuarios. Otras funcionalidades incluyen un panel de administración, configuración de Docker y documentación estándar (OpenAPI Specification)
 
+## Integrantes
+- [Valentino Alcaraz](https://github.com/Alquita)
+- [Joaquín Castellano](https://github.com/Joaquin-CasVar)
+- [Esteban Ordoñez](https://github.com/estebanordonezz)
+
 ### Deploy en Render
 La aplicación está desplegada a través de [Render]()
 
