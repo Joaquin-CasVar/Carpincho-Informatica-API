@@ -39,7 +39,9 @@ from .serializers import (
 )
 
 class ProductoViewSet(viewsets.ModelViewSet):
-    queryset = Producto.objects.all()
+    queryset = Producto.objects.filter(activo=True).select_related(
+        'fabricante', 'color', 'tipo', 'cpu', 'gpu'
+    ).order_by('id')
 
     # Autenticacion
     permission_classes = [ProductoStaffOrReadOnlyPermission]
@@ -99,7 +101,7 @@ class ProductoViewSet(viewsets.ModelViewSet):
         return Response({'status': 'Producto y componente relacionado desactivados'})
 
 class CpuViewSet(viewsets.ModelViewSet):
-    queryset = Cpu.objects.all()
+    queryset = Cpu.objects.filter(activo=True).select_related('arquitectura', 'socket').order_by('id')
 
     # Autenticacion
     permission_classes = [ProductoStaffOrReadOnlyPermission]
@@ -126,7 +128,9 @@ class CpuViewSet(viewsets.ModelViewSet):
 
 
 class GpuViewSet(viewsets.ModelViewSet):
-    queryset = Gpu.objects.all()
+    queryset = Gpu.objects.filter(activo=True).select_related(
+        'chipset', 'tipo_memoria', 'refrigeracion'
+    ).order_by('id')
 
     # Autenticacion
     permission_classes = [ProductoStaffOrReadOnlyPermission]
