@@ -66,25 +66,6 @@ class VentaViewSet(viewsets.ModelViewSet):
 
         return Response({'mensaje': total_por_mes})
 
-    @action(detail=False, methods=['post'])
-    def load_totals(self, request):
-        detalles = self.queryset.filter(activo=True)
-
-        for detalle in detalles:
-            precio = detalle.producto.precio
-
-            # Utiliza el precio del producto para asignarle el precio unitario
-            detalle.precio_unitario = precio
-            # Calcula el subtotal 
-            detalle.subtotal = precio * detalle.cantidad
-            detalle.save()
-
-            # Le suma el subtotal al total de la venta
-            detalle.venta.total += detalle.subtotal
-            detalle.venta.save()
-
-        return Response({'mensaje': 'Totales Cargados'})
-
 class DetalleVentaViewSet(viewsets.ModelViewSet):
     queryset = DetalleVenta.objects.filter(activo=True).select_related('producto').order_by('id')
     serializer_class = DetalleVentaSerializer
