@@ -16,6 +16,42 @@ class UserSerializer(serializers.ModelSerializer):
         ]   
         read_only_fields = ['id']  # noqa: RUF012
 
+class UserRegisterSerializer(serializers.ModelSerializer):
+    password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+
+    class Meta:
+        model = User
+        fields =[
+            'id', 
+            'username', 
+            'first_name', 
+            'last_name', 
+            'email', 
+            'telefono',
+            'password',
+            'password2',
+        ]
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({'password': "Password fields didn't match."})
+        return attrs
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
+            email=validated_data['email'],
+            telefono=validated_data['telefono'],
+            password=validated_data['password'],
+        )
+        return user
+
+
 class ClienteSerializer(serializers.ModelSerializer):
     persona = UserSerializer(read_only=True)
 

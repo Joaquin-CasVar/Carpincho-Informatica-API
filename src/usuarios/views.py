@@ -1,6 +1,6 @@
 from .models import User, Cliente, Vendedor
 from .permissions import UsuarioStaffPermission
-from .serializers import UserSerializer, ClienteSerializer, VendedorSerializer
+from .serializers import UserSerializer, UserRegisterSerializer, ClienteSerializer, VendedorSerializer
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -42,6 +42,12 @@ class UserViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
     filterset_fields = ['username'] # noqa: RUF012
     search_fields = ['username', 'telefono'] # noqa: RUF012
     ordering_fields = ['id', 'username'] # noqa: RUF012
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return UserRegisterSerializer
+        else:
+            return UserSerializer
 
     @extend_schema(
         summary='Desactivar usuario',
