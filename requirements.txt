@@ -1,0 +1,10 @@
+Django
+djangorestframework
+djangorestframework-simplejwt
+django-filter
+drf-spectacular
+django-cors-headers
+python-dotenv
+gunicorn
+whitenoise
+dj-database-url
