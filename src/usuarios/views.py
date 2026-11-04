@@ -4,6 +4,7 @@ from .serializers import UserSerializer, UserRegisterSerializer, ClienteSerializ
 
 from django_filters.rest_framework import DjangoFilterBackend
 
+from rest_framework.permissions import AllowAny
 from rest_framework import viewsets, status
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
@@ -32,22 +33,29 @@ class BorradoLogicoMixin:
 
 #ViewSets para los modelo Persona (User) 
 class UserViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
-    queryset = User.objects.filter(activo=True)  # Solo trae usuarios activos
-    serializer_class = UserSerializer
-    permission_classes = [UsuarioStaffPermission] # noqa: RUF012
-    model_name = "Usuario"
-    
-    # Filtros y búsquedas para Persona
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter] # noqa: RUF012
-    filterset_fields = ['username'] # noqa: RUF012
-    search_fields = ['username', 'telefono'] # noqa: RUF012
-    ordering_fields = ['id', 'username'] # noqa: RUF012
+    queryset = User.objects.filter(activo=True)
+    permission_classes = [UsuarioStaffPermission]
+    model_name = 'Usuario'
 
+    # Filtros y búsquedas
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['username']
+    search_fields = ['username', 'telefono']
+    ordering_fields = ['id', 'username']
+
+    # Permisos según la operación
+    def get_permissions(self):
+        if self.action == 'create':
+            return [AllowAny]
+
+        return [UsuarioStaffPermission]
+
+    # Serializer según la operación
     def get_serializer_class(self):
-        if self.request.method == 'POST':
+        if self.action == 'create':
             return UserRegisterSerializer
-        else:
-            return UserSerializer
+
+        return UserSerializer
 
     @extend_schema(
         summary='Desactivar usuario',
