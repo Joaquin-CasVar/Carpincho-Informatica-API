@@ -29,3 +29,7 @@ class VentaSerializer(serializers.ModelSerializer):
             'total', 'momento_carga',
         ]
         read_only_fields = ['id', 'momento_carga']
+
+class StatsSerializer(serializers.Serializer):
+    year = serializers.IntegerField()
+    month = serializers.IntegerField()
