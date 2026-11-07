@@ -9,7 +9,9 @@ from productos.views import (
     TipoProductoViewSet,
     ArquitecturaViewSet,
     SocketViewSet,
-    ChipsetGpuViewSet
+    ChipsetGpuViewSet,
+    TipoMemoriaViewSet,
+    RefrigeracionViewSet
 )
 from ventas.views import DetalleVentaViewSet, VentaViewSet
 from usuarios.views import UserViewSet, ClienteViewSet, VendedorViewSet
@@ -26,6 +28,8 @@ router.register(r'tipos-producto', TipoProductoViewSet, basename='tipos-producto
 router.register(r'arquitecturas', ArquitecturaViewSet, basename='arquitecturas-api')
 router.register(r'sockets', SocketViewSet, basename='sockets-api')
 router.register(r'chipsets-gpu', ChipsetGpuViewSet, basename='chipsets-gpu-api')
+router.register(r'tipos-memoria', TipoMemoriaViewSet, basename='tipos-memoria-api')
+router.register(r'refrigeraciones', RefrigeracionViewSet, basename='refrigeraciones-api')
 
 
 # Usuarios

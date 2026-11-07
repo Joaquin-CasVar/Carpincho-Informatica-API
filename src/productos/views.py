@@ -20,6 +20,8 @@ from .models import (
     Arquitectura,
     Socket,
     ChipsetGpu,
+    TipoMemoria,
+    Refrigeracion
 )
 
 from .permissions import ProductoStaffOrReadOnlyPermission
@@ -37,6 +39,8 @@ from .serializers import (
     GpuSerializer,
     GpuPublicSerializer,
     ChipsetGpuSerializer,
+    TipoMemoriaSerializer,
+    RefrigeracionSerializer
 )
 
 class ProductoPagination(PageNumberPagination):
@@ -194,4 +198,12 @@ class ChipsetGpuViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ChipsetGpu.objects.all()
     serializer_class = ChipsetGpuSerializer
     permission_classes = [AllowAny]
+
+class TipoMemoriaViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = TipoMemoria.objects.all()
+    serializer_class = TipoMemoriaSerializer
+
+class RefrigeracionViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Refrigeracion.objects.all()
+    serializer_class = RefrigeracionSerializer
 

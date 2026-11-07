@@ -80,12 +80,12 @@ class VentaViewSet(viewsets.ModelViewSet):
                     total_por_vendedor[venta.vendedor.persona.username] += venta.total
                     n_por_vendedor[venta.vendedor.persona.username] += 1
 
-        return Response({'Estadisticas': {
+        return Response({
             'monthly_totals': total_por_mes,
             'monthly_sales': cantidad_por_mes,
             'salesman_month_totals': list(total_por_vendedor.items()),
             'salesman_month_sales': list(n_por_vendedor.items())
-        }})
+        })
 
 class DetalleVentaViewSet(viewsets.ModelViewSet):
     queryset = DetalleVenta.objects.filter(activo=True).select_related('producto').order_by('id')
