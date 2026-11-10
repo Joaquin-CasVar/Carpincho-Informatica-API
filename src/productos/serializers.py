@@ -4,6 +4,8 @@ from .models import (
     Socket,
     Cpu,
     ChipsetGpu,
+    TipoMemoria,
+    Refrigeracion,
     Gpu,
     Fabricante,
     Color,
@@ -54,6 +56,16 @@ class ChipsetGpuSerializer(serializers.ModelSerializer):
         model = ChipsetGpu
         fields = '__all__'
 
+class TipoMemoriaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoMemoria
+        fields = '__all__'
+
+class RefrigeracionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Refrigeracion
+        fields = '__all__'
+
 class GpuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gpu
@@ -61,8 +73,8 @@ class GpuSerializer(serializers.ModelSerializer):
 
 class GpuPublicSerializer(serializers.ModelSerializer):
     chipset = ChipsetGpuSerializer()
-    tipo_memoria = serializers.StringRelatedField()
-    refrigeracion = serializers.StringRelatedField()
+    tipo_memoria = TipoMemoriaSerializer()
+    refrigeracion = RefrigeracionSerializer()
     
     class Meta:
         model = Gpu

@@ -5,6 +5,7 @@ from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
@@ -19,6 +20,8 @@ from .models import (
     Arquitectura,
     Socket,
     ChipsetGpu,
+    TipoMemoria,
+    Refrigeracion
 )
 
 from .permissions import ProductoStaffOrReadOnlyPermission
@@ -36,7 +39,13 @@ from .serializers import (
     GpuSerializer,
     GpuPublicSerializer,
     ChipsetGpuSerializer,
+    TipoMemoriaSerializer,
+    RefrigeracionSerializer
 )
+
+class ProductoPagination(PageNumberPagination):
+    page_size = 15
+
 
 class ProductoViewSet(viewsets.ModelViewSet):
     queryset = Producto.objects.filter(activo=True).select_related(
@@ -45,6 +54,8 @@ class ProductoViewSet(viewsets.ModelViewSet):
 
     # Autenticacion
     permission_classes = [ProductoStaffOrReadOnlyPermission]
+
+    pagination_class = ProductoPagination
 
     # Filtros, Busqueda y Ordenamiento
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -187,4 +198,12 @@ class ChipsetGpuViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ChipsetGpu.objects.all()
     serializer_class = ChipsetGpuSerializer
     permission_classes = [AllowAny]
+
+class TipoMemoriaViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = TipoMemoria.objects.all()
+    serializer_class = TipoMemoriaSerializer
+
+class RefrigeracionViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Refrigeracion.objects.all()
+    serializer_class = RefrigeracionSerializer
 
