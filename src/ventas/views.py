@@ -5,11 +5,12 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from drf_spectacular.utils import extend_schema, OpenApiResponse
+from drf_spectacular.utils import extend_schema, OpenApiResponse, inline_serializer
 
 from .models import DetalleVenta, Venta
+from usuarios.models import Vendedor
 from .permissions import VentaStaffPermission
-from .serializers import DetalleVentaSerializer, VentaListSerializer, VentaSerializer
+from .serializers import DetalleVentaSerializer, VentaListSerializer, VentaSerializer, StatsSerializer
 
 
 class VentaViewSet(viewsets.ModelViewSet):
@@ -56,6 +57,35 @@ class VentaViewSet(viewsets.ModelViewSet):
         venta.detalles.update(activo=False)
         return Response({'mensaje': f'La venta {venta.pk} fue dada de baja'})
 
+    @extend_schema(
+        summary='Procesado de estadisticas',
+        request=StatsSerializer
+    )
+
+    @action(detail=False, methods=['post'])
+    def estadisticas(self, request):
+        cantidad_por_mes = [0] * 12
+        total_por_mes = [0] * 12
+
+        vendedores = Vendedor.objects.filter(activo=True)
+        total_por_vendedor = {f'{v.persona.username}': 0 for v in vendedores}
+        n_por_vendedor = {f'{v.persona.username}': 0 for v in vendedores}
+
+        ventas = self.queryset.filter(activo=True)
+        for venta in ventas:
+            if request.data['year'] == venta.fecha.year:
+                cantidad_por_mes[venta.fecha.month-1] += 1
+                total_por_mes[venta.fecha.month-1] += venta.total
+                if request.data['month'] == venta.fecha.month:
+                    total_por_vendedor[venta.vendedor.persona.username] += venta.total
+                    n_por_vendedor[venta.vendedor.persona.username] += 1
+
+        return Response({
+            'monthly_totals': total_por_mes,
+            'monthly_sales': cantidad_por_mes,
+            'salesman_month_totals': list(total_por_vendedor.items()),
+            'salesman_month_sales': list(n_por_vendedor.items())
+        })
 
 class DetalleVentaViewSet(viewsets.ModelViewSet):
     queryset = DetalleVenta.objects.filter(activo=True).select_related('producto').order_by('id')
