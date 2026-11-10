@@ -7,12 +7,10 @@ Backend de una tienda de informática y hardware que permite carga, lectura, act
 - [Esteban Ordoñez](https://github.com/estebanordonezz)
 
 ### Deploy en Render
-La aplicación está desplegada a través de [Render]()
+La aplicación está desplegada a través de [Render](https://carpincho-informatica-api.onrender.com)
 
 ### Proyecto frontend que consume la API
-[Repositorio](https://github.com/Joaquin-CasVar/Carpincho-Informatica-Next.js)
-
-[Despliegue en Vercel]()
+[Repositorio](https://github.com/Joaquin-CasVar/Carpincho-Informatica-Next.js) - [Despliegue en Vercel](https://carpincho-informatica-next-js.vercel.app/)
 
 ### Prerrequisitos
 - [Python](https://www.python.org/downloads/)
@@ -26,6 +24,9 @@ La aplicación está desplegada a través de [Render]()
 ### Cómo ejecutar el proyecto
 1. Preparar Base de Datos `uv run src/manage.py migrate`
 2. Inicializar proyecto `uv run src/manage.py runserver`
+
+#### Tablero Kanban de organización del proyecto
+[GitHub Projects](https://github.com/users/Joaquin-CasVar/projects/4/views/1)
 
 ---
 
