@@ -43,13 +43,6 @@ class UserViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
     search_fields = ['username', 'telefono']
     ordering_fields = ['id', 'username']
 
-    # Permisos según la operación
-    def get_permissions(self):
-        if self.action == 'create':
-            return [AllowAny]
-
-        return [UsuarioStaffPermission]
-
     # Serializer según la operación
     def get_serializer_class(self):
         if self.action == 'create':
