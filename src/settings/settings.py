@@ -14,27 +14,33 @@ import os
 from pathlib import Path
 from datetime import timedelta
 
+from dotenv import load_dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# BASE_DIR está adentro de src/, entonces hay que salir de la carpeta para leer .env
+# En Render no existe .env y no pasa nada: se usan las variables del dashboard.
+load_dotenv(BASE_DIR / "../.env")
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(ib^1!&*p==p0#l)6z8n4l7o6@w&0&$i_cx-c(v^6vvdr^!j(j'
+# --- Seguridad -------------------------------------------------------------
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# En producción la clave SIEMPRE viene de una variable de entorno.
+# El valor por defecto es solo para desarrollo local.
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-key-solo-para-local")
 
-ALLOWED_HOSTS = []
+# DEBUG solo es True si lo pides explícitamente (en Render NO lo definas).
+DEBUG = os.getenv("DEBUG", "False") == "True"
+
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 CSRF_TRUSTED_ORIGINS = []
 
+# Render define esta variable automáticamente con el dominio de tu servicio.
 RENDER_HOST = os.getenv("RENDER_EXTERNAL_HOSTNAME")
-
 if RENDER_HOST:
     ALLOWED_HOSTS.append(RENDER_HOST)
-    CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_HOST}')
+    CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_HOST}")
 
 
 # Application definition
