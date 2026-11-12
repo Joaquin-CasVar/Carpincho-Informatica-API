@@ -44,7 +44,7 @@ class UserViewSet(BorradoLogicoMixin, viewsets.ModelViewSet):
 
     # Permisos según la operación
     def get_permissions(self):
-        if self.action == 'create':
+        if self.request.method == 'POST':
             return [AllowAny()]
 
         return [UsuarioStaffPermission()]
