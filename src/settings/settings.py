@@ -120,7 +120,8 @@ SIMPLE_JWT = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "https://carpincho-informatica-next-js.vercel.app"
+    "https://carpincho-informatica-next-js.vercel.app",
+    "https://carpincho-informatica-next-js-lemon.vercel.app"
     ]
 
 # Database
