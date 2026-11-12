@@ -10,7 +10,7 @@ Backend de una tienda de informática y hardware que permite carga, lectura, act
 La aplicación está desplegada a través de [Render](https://carpincho-informatica-api.onrender.com)
 
 ### Proyecto frontend que consume la API
-[Repositorio](https://github.com/Joaquin-CasVar/Carpincho-Informatica-Next.js) - [Despliegue en Vercel](https://carpincho-informatica-next-js.vercel.app/)
+[Repositorio](https://github.com/Joaquin-CasVar/Carpincho-Informatica-Next.js) - [Despliegue en Vercel](https://carpincho-informatica-next-js-lemon.vercel.app)
 
 ### Prerrequisitos
 - [Python](https://www.python.org/downloads/)
